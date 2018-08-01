@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Random;
 
 /**
  * @author Ashish Kedia and Adarsh Mohata
@@ -264,7 +265,45 @@ public class Main extends JFrame implements MouseListener
     }
 	
 	public void setupChess960() {
+		Random rand = new Random();
+		ArrayList<Integer> places = new ArrayList();
+		places.add(0);
+		places.add(1);
+		places.add(2);
+		places.add(3);
+		places.add(4);
+		places.add(5);
+		places.add(6);
+		places.add(7);
+		int temp = rand.nextInt(8);
+		int firstBishop = places.get(temp);
+		//places.remove(temp);
+		boolean isBlack = true;
+		if(temp % 2 != 0) {
+			isBlack = false;
+		}
+		temp = rand.nextInt(4);
+		int i;
+		for(i = 0; i < temp;) {
+			if(isBlack) {
+				if(places.get(i) % 2 != 0) {
+					i++;
+				}
+			} else {
+				if(places.get(i) % 2 == 0) {
+					i++;
+				}
+			}
+		}
+		int secondBishop = places.get(i+4);
+		System.out.println(firstBishop);
+		System.out.println(secondBishop);
 		
+		//d8 --> bishop
+		//d4 --> opp bishop on opp color
+		//d6 --> queen
+		//d20 --> knight
+		//place the king
 	}
 	
 	public void setupBoard() {
