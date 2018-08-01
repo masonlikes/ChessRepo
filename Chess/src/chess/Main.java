@@ -63,7 +63,7 @@ public class Main extends JFrame implements MouseListener
 	private ArrayList<Player> wplayer,bplayer;
 	private ArrayList<String> Wnames=new ArrayList<String>();
 	private ArrayList<String> Bnames=new ArrayList<String>();
-	private JComboBox<String> wcombo,bcombo;
+	private JComboBox<String> wcombo,bcombo,modecombo;
 	private String wname=null,bname=null,winner=null;
 	static String move;
 	private Player tempPlayer;
@@ -149,9 +149,9 @@ public class Main extends JFrame implements MouseListener
 	    WNames=Wnames.toArray(WNames);	
 		BNames=Bnames.toArray(BNames);
 		
-		Cell cell;
+		//Cell cell;
 		board.setBorder(BorderFactory.createLoweredBevelBorder());
-		pieces.Piece P;
+		//pieces.Piece P;
 		content=getContentPane();
 		setSize(Width,Height);
 		setTitle("Chess");
@@ -169,6 +169,15 @@ public class Main extends JFrame implements MouseListener
 		BlackPlayer=new JPanel();
 		BlackPlayer.setBorder(BorderFactory.createTitledBorder(null, "Black Player", TitledBorder.TOP,TitledBorder.CENTER, new Font("times new roman",Font.BOLD,18), Color.BLUE));
 	    BlackPlayer.setLayout(new BorderLayout());
+	    
+	    ArrayList<String> modetypes = new ArrayList<String>();
+	    modetypes.add("Normal");
+	    modetypes.add("Chess960");
+	    
+	    modecombo = new JComboBox<String>();
+	    for(String s : modetypes) {
+	    	modecombo.addItem(s);
+	    }
 		
 	    JPanel whitestats=new JPanel(new GridLayout(3,3));
 		JPanel blackstats=new JPanel(new GridLayout(3,3));
@@ -207,6 +216,61 @@ public class Main extends JFrame implements MouseListener
 		
 		
 		//Defining all the Cells
+		//setupBoard();
+		
+		showPlayer=new JPanel(new FlowLayout());  
+		showPlayer.add(timeSlider);
+		JLabel setTime=new JLabel("Set Timer(in mins):"); 
+		start=new Button("Start");
+		start.setBackground(Color.black);
+		start.setForeground(Color.white);
+	    start.addActionListener(new START());
+		start.setPreferredSize(new Dimension(120,40));
+		setTime.setFont(new Font("Arial",Font.BOLD,16));
+		label = new JLabel("Time Starts now", JLabel.CENTER);
+		  label.setFont(new Font("SERIF", Font.BOLD, 30));
+	      displayTime=new JPanel(new FlowLayout());
+	      time=new JPanel(new GridLayout(3,3));
+	      time.add(setTime);
+	      time.add(showPlayer);
+	      displayTime.add(modecombo);
+	      displayTime.add(start);
+	      time.add(displayTime);
+	      controlPanel.add(time);
+		board.setMinimumSize(new Dimension(800,700));
+		
+		//The Left Layout When Game is inactive
+		temp=new JPanel(){
+			private static final long serialVersionUID = 1L;
+			     
+			@Override
+		    public void paintComponent(Graphics g) {
+				  try {
+			          image = ImageIO.read(this.getClass().getResource("clash.jpg"));
+			       } catch (IOException ex) {
+			            System.out.println("not found");
+			       }
+			   
+				g.drawImage(image, 0, 0, null);
+			}         
+	    };
+
+		temp.setMinimumSize(new Dimension(800,700));
+		controlPanel.setMinimumSize(new Dimension(285,700));
+		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,temp, controlPanel);
+		
+	    content.add(split);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+	
+	public void setupChess960() {
+		
+	}
+	
+	public void setupBoard() {
+		if(modecombo.getSelectedIndex() == 0) {
+		pieces.Piece P;
+		Cell cell;
 		boardState=new Cell[8][8];
 		for(int i=0;i<8;i++)
 			for(int j=0;j<8;j++)
@@ -253,49 +317,10 @@ public class Main extends JFrame implements MouseListener
 				board.add(cell);
 				boardState[i][j]=cell;
 			}
-		showPlayer=new JPanel(new FlowLayout());  
-		showPlayer.add(timeSlider);
-		JLabel setTime=new JLabel("Set Timer(in mins):"); 
-		start=new Button("Start");
-		start.setBackground(Color.black);
-		start.setForeground(Color.white);
-	    start.addActionListener(new START());
-		start.setPreferredSize(new Dimension(120,40));
-		setTime.setFont(new Font("Arial",Font.BOLD,16));
-		label = new JLabel("Time Starts now", JLabel.CENTER);
-		  label.setFont(new Font("SERIF", Font.BOLD, 30));
-	      displayTime=new JPanel(new FlowLayout());
-	      time=new JPanel(new GridLayout(3,3));
-	      time.add(setTime);
-	      time.add(showPlayer);
-	      displayTime.add(start);
-	      time.add(displayTime);
-	      controlPanel.add(time);
-		board.setMinimumSize(new Dimension(800,700));
-		
-		//The Left Layout When Game is inactive
-		temp=new JPanel(){
-			private static final long serialVersionUID = 1L;
-			     
-			@Override
-		    public void paintComponent(Graphics g) {
-				  try {
-			          image = ImageIO.read(this.getClass().getResource("clash.jpg"));
-			       } catch (IOException ex) {
-			            System.out.println("not found");
-			       }
-			   
-				g.drawImage(image, 0, 0, null);
-			}         
-	    };
-
-		temp.setMinimumSize(new Dimension(800,700));
-		controlPanel.setMinimumSize(new Dimension(285,700));
-		split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,temp, controlPanel);
-		
-	    content.add(split);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-    }
+		}else {
+			setupChess960();
+		}
+	}
 	
 	// A function to change the chance from White Player to Black Player or vice verse
 	// It is made public because it is to be accessed in the Time Class
@@ -644,6 +669,7 @@ public class Main extends JFrame implements MouseListener
 		if(White==null||Black==null)
 			{JOptionPane.showMessageDialog(controlPanel, "Fill in the details");
 			return;}
+		setupBoard();
 		White.updateGamesPlayed();
 		White.Update_Player();
 		Black.updateGamesPlayed();
@@ -664,6 +690,7 @@ public class Main extends JFrame implements MouseListener
 		CHNC.setForeground(Color.blue);
 		showPlayer.add(CHNC);
 		displayTime.remove(start);
+		displayTime.remove(modecombo);
 		displayTime.add(label);
 		timer=new Time(label);
 		timer.start();
