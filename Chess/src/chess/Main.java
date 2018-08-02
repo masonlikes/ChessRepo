@@ -266,6 +266,16 @@ public class Main extends JFrame implements MouseListener
 	
 	public void setupChess960() {
 		Random rand = new Random();
+		ArrayList<Integer> odds = new ArrayList();
+		odds.add(1);
+		odds.add(3);
+		odds.add(5);
+		odds.add(7);
+		ArrayList<Integer> evens = new ArrayList();
+		evens.add(0);
+		evens.add(2);
+		evens.add(4);
+		evens.add(6);
 		ArrayList<Integer> places = new ArrayList();
 		places.add(0);
 		places.add(1);
@@ -276,34 +286,137 @@ public class Main extends JFrame implements MouseListener
 		places.add(6);
 		places.add(7);
 		int temp = rand.nextInt(8);
-		int firstBishop = places.get(temp);
+		int wfirstBishop = places.get(temp);
 		//places.remove(temp);
 		boolean isBlack = true;
 		if(temp % 2 != 0) {
 			isBlack = false;
 		}
 		temp = rand.nextInt(4);
-		int i;
-		for(i = 0; i < temp;) {
-			if(isBlack) {
-				if(places.get(i) % 2 != 0) {
-					i++;
-				}
-			} else {
-				if(places.get(i) % 2 == 0) {
-					i++;
-				}
-			}
+		int wsecondBishop;
+		if(isBlack) {
+			wsecondBishop = odds.get(temp);
+		}else {
+			wsecondBishop = evens.get(temp);
 		}
-		int secondBishop = places.get(i+4);
-		System.out.println(firstBishop);
-		System.out.println(secondBishop);
+		places.remove(places.indexOf(wfirstBishop));
+		places.remove(places.indexOf(wsecondBishop));
+		temp = rand.nextInt(6);
+		int wqueen = places.get(temp);
+		places.remove(places.indexOf(wqueen));
 		
-		//d8 --> bishop
-		//d4 --> opp bishop on opp color
-		//d6 --> queen
-		//d20 --> knight
-		//place the king
+		temp = rand.nextInt(5);
+		int wfirstKnight = places.get(temp);
+		temp = rand.nextInt(4);
+		int wsecondKnight = places.get(temp);
+		
+		places.remove(places.indexOf(wfirstKnight));
+		places.remove(places.indexOf(wsecondKnight));
+		
+		int wking = places.get(1);
+		int wfirstRook = places.get(0);
+		int wsecondRook = places.get(2);
+		
+		System.out.println("Bishop "+wfirstBishop);
+		System.out.println("Bishop "+wsecondBishop);
+		System.out.println("Queen "+wqueen);
+		System.out.println("King "+wking);
+		System.out.println("Rook "+wfirstRook);
+		System.out.println("Rook "+wsecondRook);
+		System.out.println("Knight "+wfirstKnight);
+		System.out.println("Knight "+wsecondKnight);
+		System.out.println();
+		
+		int bfirstBishop = flipInt(wfirstBishop);
+		int bsecondBishop = flipInt(wsecondBishop);
+		int bqueen = flipInt(wqueen);
+		int bking = flipInt(wking);
+		int bfirstRook = flipInt(wfirstRook);
+		int bsecondRook = flipInt(wsecondRook);
+		int bfirstKnight = flipInt(wfirstKnight);
+		int bsecondKnight = flipInt(wsecondKnight);
+		
+		System.out.println("Bishop "+bfirstBishop);
+		System.out.println("Bishop "+bsecondBishop);
+		System.out.println("Queen "+bqueen);
+		System.out.println("King "+bking);
+		System.out.println("Rook "+bfirstRook);
+		System.out.println("Rook "+bsecondRook);
+		System.out.println("Knight "+bfirstKnight);
+		System.out.println("Knight "+bsecondKnight);
+		
+		pieces.Piece P;
+		Cell cell;
+		boardState=new Cell[8][8];
+		for(int i=0;i<8;i++)
+			for(int j=0;j<8;j++)
+			{	
+				P=null;
+				if(i==0&&j==bfirstRook)
+					P=br01;
+				else if(i==0&&j==bsecondRook)
+					P=br02;
+				else if(i==7&&j==wfirstRook)
+					P=wr01;
+				else if(i==7&&j==wsecondRook)
+					P=wr02;
+				else if(i==0&&j==bfirstKnight)
+					P=bk01;
+				else if (i==0&&j==bsecondKnight)
+					P=bk02;
+				else if(i==7&&j==wfirstKnight)
+					P=wk01;
+				else if (i==7&&j==wsecondKnight)
+					P=wk02;
+				else if(i==0&&j==bfirstBishop)
+					P=bb01;
+				else if (i==0&&j==bsecondBishop)
+					P=bb02;
+				else if(i==7&&j==wfirstBishop)
+					P=wb01;
+				else if(i==7&&j==wsecondBishop)
+					P=wb02;
+				else if(i==0&&j==bking) {
+					bk.setx(bking);
+					P=bk;
+				}else if(i==0&&j==bqueen)
+					P=bq;
+				else if(i==7&&j==wking) {
+					wk.setx(wking);
+					P=wk;
+				}else if(i==7&&j==wqueen)
+					P=wq;
+				else if(i==1)
+				P=bp[j];
+				else if(i==6)
+					P=wp[j];
+				cell=new Cell(i,j,P);
+				cell.addMouseListener(this);
+				board.add(cell);
+				boardState[i][j]=cell;
+			}
+	}
+	
+	public int flipInt(int num) {
+		switch(num) {
+		case 0:
+			return 7;
+		case 1:
+			return 6;
+		case 2:
+			return 5;
+		case 3:
+			return 4;
+		case 4:
+			return 3;
+		case 5:
+			return 2;
+		case 6:
+			return 1;
+		case 7:
+			return 0;
+		}
+		return num;
 	}
 	
 	public void setupBoard() {
