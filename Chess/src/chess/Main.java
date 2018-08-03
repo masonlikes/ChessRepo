@@ -376,11 +376,13 @@ public class Main extends JFrame implements MouseListener {
 					P = wb02;
 				else if (i == 0 && j == bking) {
 					bk.setx(bking);
+					bk.sety(0);
 					P = bk;
 				} else if (i == 0 && j == bqueen)
 					P = bq;
 				else if (i == 7 && j == wking) {
 					wk.setx(wking);
+					wk.sety(7);
 					P = wk;
 				} else if (i == 7 && j == wqueen)
 					P = wq;
@@ -543,10 +545,25 @@ public class Main extends JFrame implements MouseListener {
 			((King) (newboardstate[tocell.x][tocell.y].getpiece())).sety(tocell.y);
 		}
 		newboardstate[fromcell.x][fromcell.y].removePiece();
-		if (((King) (newboardstate[getKing(chance).getx()][getKing(chance).gety()].getpiece()))
-				.isindanger(newboardstate) == true)
-			return true;
-		else
+		int wkx = getKing(0).getx();
+		int wky = getKing(0).gety();
+		int bkx = getKing(1).getx();
+		int bky = getKing(1).gety();
+		pieces.Piece pp = (King) (newboardstate[getKing(chance).getx()][getKing(chance).gety()].getpiece());
+		System.out.println("WHITE X " + wkx);
+		System.out.println("WHITE Y " + wky);
+		System.out.println("BLACK X " + bkx);
+		System.out.println("BLACK Y " + bky);
+		System.out.println(pp);
+		boolean first = true;
+		if (!first) {
+			first = false;
+			if (((King) (newboardstate[getKing(chance).getx()][getKing(chance).gety()].getpiece()))
+					.isindanger(newboardstate) == true)
+				return true;
+			else 
+				return false;
+		} else
 			return false;
 	}
 
