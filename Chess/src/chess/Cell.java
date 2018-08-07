@@ -1,6 +1,8 @@
 package chess;
 
 import java.awt.*;
+import java.net.URL;
+
 import javax.swing.*;
 
 import pieces.*;
@@ -59,10 +61,17 @@ public class Cell extends JPanel implements Cloneable{
 	
 	public void setPiece(Piece p)    //Function to inflate a cell with a piece
 	{
+		try {
 		piece=p;
-		ImageIcon img=new javax.swing.ImageIcon(this.getClass().getResource(p.getPath()));
+		Class cl = this.getClass();
+		String name = p.getPath();
+		URL url = cl.getResource(name);
+		ImageIcon img=new javax.swing.ImageIcon(url);
 		content=new JLabel(img);
 		this.add(content);
+		}catch(Exception e) {
+			
+		}
 	}
 	
 	public void removePiece()      //Function to remove a piece from the cell

@@ -44,7 +44,23 @@ public class Main extends JFrame implements MouseListener {
 	private static King wk, bk;
 	private Cell c, previous;
 	private int chance = 0;
+	public int getChance() {
+		return chance;
+	}
+
+	public void setChance(int chance) {
+		this.chance = chance;
+	}
+
 	private Cell boardState[][];
+	public Cell[][] getBoardState() {
+		return boardState;
+	}
+
+	public void setBoardState(Cell[][] boardState) {
+		this.boardState = boardState;
+	}
+
 	private ArrayList<Cell> destinationlist = new ArrayList<Cell>();
 	private Player White = null, Black = null;
 	private JPanel board = new JPanel(new GridLayout(8, 8));
@@ -77,28 +93,6 @@ public class Main extends JFrame implements MouseListener {
 	public static void main(String[] args) {
 
 		// variable initialization
-		wr01 = new Rook("WR01", "White_Rook.png", 0);
-		wr02 = new Rook("WR02", "White_Rook.png", 0);
-		br01 = new Rook("BR01", "Black_Rook.png", 1);
-		br02 = new Rook("BR02", "Black_Rook.png", 1);
-		wk01 = new Knight("WK01", "White_Knight.png", 0);
-		wk02 = new Knight("WK02", "White_Knight.png", 0);
-		bk01 = new Knight("BK01", "Black_Knight.png", 1);
-		bk02 = new Knight("BK02", "Black_Knight.png", 1);
-		wb01 = new Bishop("WB01", "White_Bishop.png", 0);
-		wb02 = new Bishop("WB02", "White_Bishop.png", 0);
-		bb01 = new Bishop("BB01", "Black_Bishop.png", 1);
-		bb02 = new Bishop("BB02", "Black_Bishop.png", 1);
-		wq = new Queen("WQ", "White_Queen.png", 0);
-		bq = new Queen("BQ", "Black_Queen.png", 1);
-		wk = new King("WK", "White_King.png", 0, 7, 3);
-		bk = new King("BK", "Black_King.png", 1, 0, 3);
-		wp = new Pawn[8];
-		bp = new Pawn[8];
-		for (int i = 0; i < 8; i++) {
-			wp[i] = new Pawn("WP0" + (i + 1), "White_Pawn.png", 0);
-			bp[i] = new Pawn("BP0" + (i + 1), "Black_Pawn.png", 1);
-		}
 
 		// Setting up the board
 		Mainboard = new Main();
@@ -107,7 +101,7 @@ public class Main extends JFrame implements MouseListener {
 	}
 
 	// Constructor
-	private Main() {
+	Main() {
 		timeRemaining = 60;
 		timeSlider = new JSlider();
 		move = "White";
@@ -263,7 +257,7 @@ public class Main extends JFrame implements MouseListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
-	public void setupChess960() {
+	public BothKings setupChess960() {
 		Random rand = new Random();
 		ArrayList<Integer> odds = new ArrayList();
 		odds.add(1);
@@ -286,6 +280,7 @@ public class Main extends JFrame implements MouseListener {
 		places.add(7);
 		int temp = rand.nextInt(8);
 		int wfirstBishop = places.get(temp);
+		System.out.println("Bishop " + wfirstBishop);
 		// places.remove(temp);
 		boolean isBlack = true;
 		if (temp % 2 != 0) {
@@ -298,23 +293,37 @@ public class Main extends JFrame implements MouseListener {
 		} else {
 			wsecondBishop = evens.get(temp);
 		}
+		System.out.println("Bishop " + wsecondBishop);
 		places.remove(places.indexOf(wfirstBishop));
 		places.remove(places.indexOf(wsecondBishop));
 		temp = rand.nextInt(6);
 		int wqueen = places.get(temp);
+		System.out.println("Queen " + wqueen);
 		places.remove(places.indexOf(wqueen));
 
 		temp = rand.nextInt(5);
 		int wfirstKnight = places.get(temp);
+		System.out.println("Knight " + wfirstKnight);
+		places.remove(places.indexOf(wfirstKnight));
 		temp = rand.nextInt(4);
 		int wsecondKnight = places.get(temp);
+		System.out.println("Knight " + wsecondKnight);
 
-		places.remove(places.indexOf(wfirstKnight));
 		places.remove(places.indexOf(wsecondKnight));
 
 		int wking = places.get(1);
+		System.out.println("King " + wking);
 		int wfirstRook = places.get(0);
 		int wsecondRook = places.get(2);
+		System.out.println("Rook " + wfirstRook);
+		System.out.println("Rook " + wsecondRook);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
 
 		System.out.println("Bishop " + wfirstBishop);
 		System.out.println("Bishop " + wsecondBishop);
@@ -393,6 +402,8 @@ public class Main extends JFrame implements MouseListener {
 				board.add(cell);
 				boardState[i][j] = cell;
 			}
+		
+		return new BothKings(wk,bk);
 	}
 
 	public int flipInt(int num) {
@@ -418,6 +429,28 @@ public class Main extends JFrame implements MouseListener {
 	}
 
 	public void setupBoard() {
+		wr01 = new Rook("WR01", "White_Rook.png", 0);
+		wr02 = new Rook("WR02", "White_Rook.png", 0);
+		br01 = new Rook("BR01", "Black_Rook.png", 1);
+		br02 = new Rook("BR02", "Black_Rook.png", 1);
+		wk01 = new Knight("WK01", "White_Knight.png", 0);
+		wk02 = new Knight("WK02", "White_Knight.png", 0);
+		bk01 = new Knight("BK01", "Black_Knight.png", 1);
+		bk02 = new Knight("BK02", "Black_Knight.png", 1);
+		wb01 = new Bishop("WB01", "White_Bishop.png", 0);
+		wb02 = new Bishop("WB02", "White_Bishop.png", 0);
+		bb01 = new Bishop("BB01", "Black_Bishop.png", 1);
+		bb02 = new Bishop("BB02", "Black_Bishop.png", 1);
+		wq = new Queen("WQ", "White_Queen.png", 0);
+		bq = new Queen("BQ", "Black_Queen.png", 1);
+		wk = new King("WK", "White_King.png", 0, 7, 3);
+		bk = new King("BK", "Black_King.png", 1, 0, 3);
+		wp = new Pawn[8];
+		bp = new Pawn[8];
+		for (int i = 0; i < 8; i++) {
+			wp[i] = new Pawn("WP0" + (i + 1), "White_Pawn.png", 0);
+			bp[i] = new Pawn("BP0" + (i + 1), "Black_Pawn.png", 1);
+		}
 		if (modecombo.getSelectedIndex() == 0) {
 			pieces.Piece P;
 			Cell cell;
@@ -614,8 +647,10 @@ public class Main extends JFrame implements MouseListener {
 				y = tempc.y;
 			}
 			newboardstate[fromcell.x][fromcell.y].removePiece();
-			if ((((King) (newboardstate[x][y].getpiece())).isindanger(newboardstate) == false))
-				newlist.add(tempc);
+			if((newboardstate[x][y].getpiece()) != null) {
+				if ((((King) (newboardstate[x][y].getpiece())).isindanger(newboardstate) == false))
+					newlist.add(tempc);
+			}
 		}
 		return newlist;
 	}
@@ -944,6 +979,15 @@ public class Main extends JFrame implements MouseListener {
 			j.repaint();
 			j.add(det);
 			selected = true;
+		}
+	}
+	
+	class BothKings {
+		King WK;
+		King BK;
+		BothKings(King wk, King bk){
+			WK = wk;
+			BK = bk;
 		}
 	}
 }
